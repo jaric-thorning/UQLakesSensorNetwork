@@ -1,0 +1,18 @@
+			NETWORK SERVICE
+				|
+   				|
+				|
+			    GATEWAY
+ 		(LORA module on top of building)
+				|
+   				|
+				|
+			   LORA MODEM
+				|
+   				|
+				|
+			 EMBEDDED SYSTEM
+				|
+   				|
+				|
+			      SENSOR
