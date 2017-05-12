@@ -20,4 +20,3 @@ Next steps:
 - Find out how data collection on probe currently works
 - Design basic communication model (who initiates communication, what basic uses cases etc.)
 - Get cloud server for data storage
-- Develop basic web portal to display dummy data for the time being
