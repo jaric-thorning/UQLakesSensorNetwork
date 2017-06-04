@@ -21,7 +21,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(msg.payload)
+    parse_message(msg.payload)
 
 
 def parse_message(msg):
@@ -57,46 +57,60 @@ def parse_message(msg):
 
         data[sender_id].complete = False
         data[sender_id].packet_dropped = False
+        data[sender_id].packet_data = ''
 
         # Get the timestamp value (32b integer):
-        time_sent = int(packet_data_bytes[1] << 24) + int(packet_data_bytes[2] << 16) + int(
-            packet_data_bytes[3] << 8) + int(packet_data_bytes[4])
+        # time_sent = int(packet_data_bytes[1] << 24) + int(packet_data_bytes[2] << 16) + int(
+        #     packet_data_bytes[3] << 8) + int(packet_data_bytes[4])
+        time_sent = 0
 
         # Update sequence timestamp:
         data[sender_id].last_packet_time = time_sent
     elif seq_no > 1 and (seq_no - data[sender_id].last_packet_seq > 1):
         # Missed a packet:
-        print("Packet dropped.");
+        print("Packet dropped.")
         data[sender_id].packet_dropped = True
 
     # Update sequence number:
     data[sender_id].last_packet_seq = seq_no
 
     # ----------------------------------------------------------------------------------------------
-    if seq_no > 1:
-        payload = packet_data_bytes[2:]
-        data_dec = payload.decode('ASCII', 'ignore')
+    data_dec = ''
 
-        # Append data to sequence data payload:
-        data[sender_id].packet_data += data_dec
+    # Decode the payload data:
+    if seq_no == 1:
+        payload = packet_data_bytes[1:]
+    else:
+        payload = packet_data_bytes[1:]
 
-        # See if sequence is complete:
-        if data_dec[-1] == '\n':
-            data[sender_id].complete = True
+    data_dec = payload.decode('ASCII', 'ignore')
 
-            # Send the data to the cloud:
-            if not data[sender_id].packet_dropped:
-                send_data(data[sender_id], sender_id)
-            else:
-                print("Sequence complete, but packet missing.")
+    # Append data to sequence data payload:
+    data[sender_id].packet_data += data_dec
 
+    # Status update:
     print("[" + time_received + "] " + sender_id + ": " + "Sequence: " + str(
         data[sender_id].last_packet_seq) + ". Data: " + data_dec)
 
+    # See if sequence is complete:
+    if data_dec.endswith('~'):
+        data[sender_id].complete = True
+
+        data[sender_id].packet_data = data[sender_id].packet_data[:-1]
+
+        # Send the data to the cloud:
+        if not data[sender_id].packet_dropped:
+            send_data(data[sender_id], sender_id)
+        else:
+            print("Sequence complete, but packet missing.")
+
 
 def send_data(mote_data, mote_id):
+    print("-----------------------------")
     print("Sequence complete (" + mote_id + ") . Time: " + str(
         mote_data.last_packet_time) + " Data: " + mote_data.packet_data)
+    print("-----------------------------")
+
 
 
 client = mqtt.Client()

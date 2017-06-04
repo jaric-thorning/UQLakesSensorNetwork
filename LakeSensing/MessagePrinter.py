@@ -40,7 +40,9 @@ def parse_message(msg):
     payload = packet_data_bytes[:]
     data_dec = payload.decode('ASCII', 'ignore')
 
-    print("[" + time_received + "] " + sender_id + ": " + packet_data + " [" + data_dec + "]")
+    seq_no = int(packet_data_bytes[0])
+
+    print("[" + time_received + "] " + sender_id + ": " + packet_data + " [" + data_dec + "] " + str(seq_no))
 
 
 
