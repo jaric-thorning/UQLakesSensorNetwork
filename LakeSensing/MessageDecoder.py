@@ -66,10 +66,19 @@ def parse_message(msg):
 
         # Update sequence timestamp:
         data[sender_id].last_packet_time = time_sent
-    elif seq_no > 1 and (seq_no - data[sender_id].last_packet_seq > 1):
-        # Missed a packet:
-        print("Packet dropped.")
-        data[sender_id].packet_dropped = True
+    elif seq_no > 1:
+        diff = seq_no - data[sender_id].last_packet_seq
+
+        if abs(diff) > 1:
+            data[sender_id].packet_dropped = True
+
+        if diff > 1:
+            # Packet missed:
+            print("Missed " + diff + " packet(s).")
+        if diff < 1:
+            # Sequence number is lower than last number received:
+            print(
+                "Packet has lower sequence number than previous one. Either missing control frame, or packets arrived out-of order.")
 
     # Update sequence number:
     data[sender_id].last_packet_seq = seq_no
@@ -110,7 +119,6 @@ def send_data(mote_data, mote_id):
     print("Sequence complete (" + mote_id + ") . Time: " + str(
         mote_data.last_packet_time) + " Data: " + mote_data.packet_data)
     print("-----------------------------")
-
 
 
 client = mqtt.Client()
