@@ -1,4 +1,4 @@
-class Mote:
+class PacketSequence:
     # Time of current sequence:
     last_packet_time = -1
 
@@ -11,4 +11,5 @@ class Mote:
     # Set to true if sequence is complete
     complete = False
 
+    # True if a packet in this sequence has been dropped
     packet_dropped = False

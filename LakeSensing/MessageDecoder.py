@@ -3,7 +3,7 @@ import base64
 import paho.mqtt.client as mqtt
 import json
 
-from Mote import Mote
+from PacketSequence import PacketSequence
 
 server_url = '172.31.41.148'
 server_port = 1883
@@ -40,14 +40,15 @@ def parse_message(msg):
     packet_data_bytes = base64.b64decode(packet_data)
 
     if sender_id not in data:
-        data[sender_id] = Mote()
+        data[sender_id] = PacketSequence()
         data[sender_id].complete = True
+        data[sender_id].packet_dropped = False
 
     # ----------------------------------------------------------------------------------------------
     # Sequence number is first byte:
     seq_no = int(packet_data_bytes[0])
 
-    if seq_no == 0:
+    if seq_no == 1:
         # This is a control frame
 
         # Make sure that previous sequence was complete:
@@ -55,6 +56,7 @@ def parse_message(msg):
             print("Received new control frame, but previous sequence hasn't been terminated.")
 
         data[sender_id].complete = False
+        data[sender_id].packet_dropped = False
 
         # Get the timestamp value (32b integer):
         time_sent = int(packet_data_bytes[1] << 24) + int(packet_data_bytes[2] << 16) + int(
@@ -62,7 +64,7 @@ def parse_message(msg):
 
         # Update sequence timestamp:
         data[sender_id].last_packet_time = time_sent
-    elif seq_no > 0 and (seq_no - data[sender_id].last_packet_seq > 1):
+    elif seq_no > 1 and (seq_no - data[sender_id].last_packet_seq > 1):
         # Missed a packet:
         print("Packet dropped.");
         data[sender_id].packet_dropped = True
@@ -71,7 +73,7 @@ def parse_message(msg):
     data[sender_id].last_packet_seq = seq_no
 
     # ----------------------------------------------------------------------------------------------
-    if seq_no > 0:
+    if seq_no > 1:
         payload = packet_data_bytes[2:]
         data_dec = payload.decode('ASCII', 'ignore')
 
@@ -84,22 +86,17 @@ def parse_message(msg):
 
             # Send the data to the cloud:
             if not data[sender_id].packet_dropped:
-                send_data(data[sender_id])
+                send_data(data[sender_id], sender_id)
             else:
-                print("Sequence complete, but packet missing.");
+                print("Sequence complete, but packet missing.")
 
-    print(sender_id + ": " + "Sequence: " + str(data[sender_id].last_packet_seq) + ". Data: " + data_dec)
-
-
-def send_data(mote_data):
-    print("Sequence complete. Time: " + str(mote_data.last_packet_time) + " Data: " + mote_data.packet_data)
+    print("[" + time_received + "] " + sender_id + ": " + "Sequence: " + str(
+        data[sender_id].last_packet_seq) + ". Data: " + data_dec)
 
 
-    # key = bytes([0x01, 0x59, 0x33, 0x9A, 0xBB, 0x41, 0x42])
-    # res = base64.b64encode(key).decode('ASCII')
-
-    # test_msg = '{"ack":false,"adr":false,"appeui":"45-86-aa-94-c6-32-42-cb","chan":0,"cls":0,"codr":"4/5","data":"' + res + '","datr":"SF10BW125","deveui":"00-80-00-00-00-00-ca-67","freq":"924.8","lsnr":"6","mhdr":"4006000000000000","modu":"LORA","opts":"","port":4,"rfch":0,"rssi":-108,"seqn":0,"size":16,"timestamp":"2017-06-04T05:10:42.469226Z","tmst":184257916}'
-    # parse_message(test_msg)
+def send_data(mote_data, mote_id):
+    print("Sequence complete (" + mote_id + ") . Time: " + str(
+        mote_data.last_packet_time) + " Data: " + mote_data.packet_data)
 
 
 client = mqtt.Client()
