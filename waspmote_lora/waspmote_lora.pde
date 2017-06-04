@@ -55,53 +55,62 @@ void setup()
     send_command("AT+NK=1,L0raStLucia\n");
     send_command("AT+JR=100\n");
     send_command("AT+JOIN\n");
-
-    
+    send_command("AT+AP=4\n");
 
 }
 
+void format_frame(const char * text){
+  char packet[10];
+  char command[19];
+  
+  
+  packet[0] = 0;
+  packet[1] = 'T';
+  packet[2] = 'T';
 
+  int text_index = 0; //text index
+  int packet_index = 3; //packet index
+  int remaining_bytes = strlen(text);
+  int completed_bytes = 0;
+  USB.print("Formatting ");
+  USB.print(strlen(text));
+  USB.print(" bytes.\r\n");
+
+  while(remaining_bytes > 0){
+    //Update packet
+    if(remaining_bytes > 10){
+      strncpy(packet, text + completed_bytes, 10);
+      completed_bytes += 10;
+      remaining_bytes -= 10; 
+    } else{
+      strncpy(packet, text + completed_bytes, remaining_bytes);
+      completed_bytes += 10;
+      remaining_bytes = 0;
+    }
+
+    //send packet
+    strcpy(command, "AT+SEND=");
+    strcat(command, packet);
+    strcat(command, "\n");
+
+    send_command(command);
+    
+    //USB.print("Command formatted > ");
+    //USB.print(command);
+    //USB.print("\r\n");
+        
+    //reset packet & command
+    packet_index = 3;
+    memset(packet, 0, 11);
+    memset(command, 0, 19);
+    packet[0] = 0;
+    packet[1] = 'T';
+    packet[2] = 'T';
+  }
+}
 void loop()
 {   
-    send_command("AT+SEND=~CSSE4011~\n");
-   
-    /*delay(1000);
-    W232.send("AT\n");
-    delay(100);
-    check_reply();
-    
-    delay(1000);
-    W232.send("AT+NJS\n");
-    delay(100);
-    check_reply();
-    
-    delay(1000);
-    W232.send("AT+FREQ\n");
-    delay(100);
-    check_reply();
-
-    /*W232.send("AT+SEND=lakesensing\n");
-      USB.print("REPLY: ");
-      while (W232.available()) {
-         USB.print(W232.read());
-    }*/
-    
-    //USB.printf("Loop counter: %d\n", i);
-    /* W232.send("AT+DC\n");
-     
-
-     W232.send("AT+DI\n");
-     while (W232.available()) {
-         USB.print(W232.read());
-     }
-     USB.println("");
-
-     W232.send("AT+SDR\n");
-     while (W232.available()) {
-         USB.print(W232.read());
-     }*/
-
-    
-
+    send_command("AT+SEND=0123456789A\n");
+    format_frame("This is some data, hello world!");
     delay(1000);
 }
