@@ -6,21 +6,28 @@
 
 #define NUMCOMMANDS 8
 char buffer [128];
+char data[200];
 double Readings[9];
 
+/*
+ * Writes an input string to serial port 1
+ */
 void serialStringWrite(char* str) {
     int commandLength = strlen(str);
     for (int i = 0; i < commandLength; i++) {
         serialWrite(str[i], 1);
     }
 }
+
 void setup()
 {
     // Opening UART to show messages using 'Serial Monitor'
     USB.ON();
 
     delay(100);
-
+    while(mtdotlora_setup()==1){
+      
+    }
     /*
         W232.parityBit(DISABLED);
         W232.stopBitConfig(ONE_STOP_BIT);
@@ -66,9 +73,7 @@ void loop()
     {
         //USB.println("Data:");
         //Got data from other UART:
-        buffer[index] = '\n';
-        index++;
-        buffer[index] = '\0';
+        buffer[index-1] = '\0';
         char testchar;
         int index = 0;
         int spacecounter = 0;
@@ -81,7 +86,11 @@ void loop()
             index++;
             testchar = buffer[index];
         }
-        USB.print(buffer);
+
+            sprintf(data, "%lu,%s~",
+            RTC.getEpochTime(),buffer); // CO
+        USB.println(buffer);
+        mtdotlora_send_text(data);
     }
 
 
