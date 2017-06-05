@@ -184,9 +184,11 @@ def parse_payload(mote_data, mote_id):
 
 def send_data(data):
     conn = http.client.HTTPSConnection(uq_server_host)
-    headers = {"Content-type": "application/json"}
 
-    conn.request("PUT", "/data/put.php", data, headers)
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    content = "data=" + data
+
+    conn.request("POST", "/data/put.php", content, headers)
     response = conn.getresponse()
 
     if response.status == 200:
@@ -200,7 +202,7 @@ def send_data(data):
 
 # --------------------------------------------------
 
-# send_data('{"test": 2}')
+#send_data('{"test": 2}')
 
 
 client = mqtt.Client()
