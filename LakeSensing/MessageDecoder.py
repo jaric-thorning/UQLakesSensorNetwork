@@ -8,7 +8,7 @@ import http.client
 from PacketSequence import PacketSequence
 
 # Char used to separate individual data points in payload
-data_separator = ' '
+data_separator = ','
 
 server_url = '172.31.41.148'
 server_port = 1883
@@ -72,6 +72,9 @@ def parse_message(msg):
         if abs(diff) > 1:
             data[sender_id].packet_dropped = True
 
+        if diff == 0:
+            print("Packet with same sequence number received (retransmission?)")
+
         if diff > 1:
             # Packet missed:
             print("Missed " + str(diff) + " packet(s).")
@@ -113,7 +116,6 @@ def parse_message(msg):
 def parse_payload(mote_data, mote_id):
     print("-----------------------------")
     print("Sequence complete (" + mote_id + ") . Data: " + mote_data.packet_data)
-    print("-----------------------------")
 
     if mote_id not in sensors:
         print("No sensor type for mote " + mote_id + " defined.")
@@ -147,15 +149,15 @@ def parse_payload(mote_data, mote_id):
                               'co2': components[3], 'no2': components[4], 'o3': components[5],
                               'co': components[6]}
     elif sensor_type == 'water':
-        if len(components) != 11:
+        if len(components) != 10:
             print("Wrong number of data points for type 'water sensor'")
             return
 
         transmit_data_dict = {'time': mote_data.seq_time, 'mote': mote_id, 'type': 'water',
                               'temperature': components[1],
-                              'humidity': components[2],
-                              'co2': components[3], 'no2': components[4], 'o3': components[5],
-                              'co': components[6]}
+                              'cond': components[2],
+                              'spcond': components[3], 'sal': components[4], 'ph_mv': components[5],
+                              'ph': components[6], 'orp': components[7], 'depth': components[8], 'odo': components[9]}
     else:
         print('Invalid sensor type for mote ' + mote_id)
         return
@@ -163,7 +165,11 @@ def parse_payload(mote_data, mote_id):
     transmit_data_json = json.dumps(transmit_data_dict)
     transmit_data = str(transmit_data_json)
 
-    send_data(transmit_data)
+    print(transmit_data)
+
+    print("-----------------------------")
+
+    # send_data(transmit_data)
 
 
 def send_data(data):
@@ -183,7 +189,7 @@ def send_data(data):
 # m.packet_data = '946598400 -00.00 -00 0.00 0.00 0.00 0.0'
 # send_data(m, '00-80-00-00-00-00-ca-67')
 
-#send_data('{"test": 1}')
+# send_data('{"test": 1}')
 
 client = mqtt.Client()
 client.on_connect = on_connect
