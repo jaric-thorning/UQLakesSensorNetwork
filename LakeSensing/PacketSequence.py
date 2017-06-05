@@ -1,6 +1,6 @@
 class PacketSequence:
     # Time of current sequence:
-    last_packet_time = -1
+    seq_time = -1
 
     # Aggregated data of all packets in current sequence:
     packet_data = ''

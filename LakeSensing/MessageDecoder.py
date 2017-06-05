@@ -2,8 +2,12 @@ import base64
 
 import paho.mqtt.client as mqtt
 import json
+import locale
 
 from PacketSequence import PacketSequence
+
+# Char used to separate individual data points in payload
+data_separator = ' '
 
 server_url = '172.31.41.148'
 server_port = 1883
@@ -13,6 +17,9 @@ topic = 'lora/+/up'
 application_port = 4
 
 data = dict()
+
+# Type of sensors per device. Type is either 'air' or 'water'.
+sensors = {'00-80-00-00-00-00-ca-67': 'air'}
 
 
 def on_connect(client, userdata, flags, rc):
@@ -58,14 +65,6 @@ def parse_message(msg):
         data[sender_id].complete = False
         data[sender_id].packet_dropped = False
         data[sender_id].packet_data = ''
-
-        # Get the timestamp value (32b integer):
-        # time_sent = int(packet_data_bytes[1] << 24) + int(packet_data_bytes[2] << 16) + int(
-        #     packet_data_bytes[3] << 8) + int(packet_data_bytes[4])
-        time_sent = 0
-
-        # Update sequence timestamp:
-        data[sender_id].last_packet_time = time_sent
     elif seq_no > 1:
         diff = seq_no - data[sender_id].last_packet_seq
 
@@ -74,7 +73,7 @@ def parse_message(msg):
 
         if diff > 1:
             # Packet missed:
-            print("Missed " + diff + " packet(s).")
+            print("Missed " + str(diff) + " packet(s).")
         if diff < 1:
             # Sequence number is lower than last number received:
             print(
@@ -87,14 +86,10 @@ def parse_message(msg):
     data_dec = ''
 
     # Decode the payload data:
-    if seq_no == 1:
-        payload = packet_data_bytes[1:]
-    else:
-        payload = packet_data_bytes[1:]
-
+    payload = packet_data_bytes[1:]
     data_dec = payload.decode('ASCII', 'ignore')
 
-    # Append data to sequence data payload:
+    # Append data:
     data[sender_id].packet_data += data_dec
 
     # Status update:
@@ -116,15 +111,57 @@ def parse_message(msg):
 
 def send_data(mote_data, mote_id):
     print("-----------------------------")
-    print("Sequence complete (" + mote_id + ") . Time: " + str(
-        mote_data.last_packet_time) + " Data: " + mote_data.packet_data)
+    print("Sequence complete (" + mote_id + ") . Data: " + mote_data.packet_data)
     print("-----------------------------")
 
+    if mote_id not in sensors:
+        print("No sensor type for mote " + mote_id + " defined.")
+        return
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
+    sensor_type = sensors[mote_id]
+    components = mote_data.packet_data.split(data_separator)
 
-client.connect(server_url, server_port, 60)
+    # First component should be timestamp:
+    mote_data.seq_time = int(components[0])
 
-client.loop_forever()
+    # Replace decimal separator with local one to ensure compatability when using different locales + parse floats:
+    dec_point = locale.localeconv()['decimal_point']
+    for i in range(1, len(components)):
+        try:
+            x = components[i].replace('.', dec_point)
+            components[i] = float(x)
+        except ValueError:
+            print("Failed to convert '" + components[i] + "' to float.")
+
+    # Create correct json for sensor type:
+    transmit_data = ''
+    if sensor_type == 'air':
+        # 6 numbers + 1 timestamp:
+        if len(components) != 7:
+            print("Wrong number of data points for type 'air sensor'")
+            return
+
+        transmit_data_dict = {'time': mote_data.seq_time, 'mote': mote_id, 'temperature': components[1],
+                              'humidity': components[2],
+                              'co2': components[3], 'no2': components[4], 'o3': components[5],
+                              'co': components[6]}
+
+        transmit_data_json = json.dumps(transmit_data_dict)
+        transmit_data = str(transmit_data_json)
+
+    print(transmit_data)
+
+# --------------------------------------------------
+
+# m = PacketSequence()
+# m.packet_data = '946598400 -00.00 -00 0.00 0.00 0.00 0.0'
+# send_data(m, '00-80-00-00-00-00-ca-67')
+
+
+# client = mqtt.Client()
+# client.on_connect = on_connect
+# client.on_message = on_message
+#
+# client.connect(server_url, server_port, 60)
+#
+# client.loop_forever()
