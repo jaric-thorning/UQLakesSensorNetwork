@@ -20,7 +20,7 @@ application_port = 4
 data = dict()
 
 # Type of sensors per device. Type is either 'air' or 'water'.
-sensors = {'00-80-00-00-00-00-ca-67': 'air'}
+sensors = {'00-80-00-00-00-00-ca-67': 'air', '00-80-00-00-00-00-ca-19':'water'}
 
 
 def on_connect(client, userdata, flags, rc):
@@ -42,6 +42,10 @@ def parse_message(msg):
 
     time_received = j_object['timestamp']
     sender_id = j_object['deveui']
+
+    if sender_id not in sensors:
+        print("Unknown sensor with id " + sender_id)
+        return
 
     # Process the packet payload:
     packet_data = j_object['data']
@@ -174,7 +178,9 @@ def parse_payload(mote_data, mote_id):
 
 def send_data(data):
     conn = http.client.HTTPSConnection("s4237341-csse4011.uqcloud.net")
-    conn.request("PUT", "/data/put.php", data)
+    headers = {"Content-type": "application/json"}
+
+    conn.request("PUT", "/data/put.php", data, headers)
     response = conn.getresponse()
 
     if response.status == 200:
@@ -182,14 +188,14 @@ def send_data(data):
     else:
         print("Failed to send data: error code is " + str(response.status))
 
+    data = response.read()
+    print(data)
+
 
 # --------------------------------------------------
 
-# m = PacketSequence()
-# m.packet_data = '946598400 -00.00 -00 0.00 0.00 0.00 0.0'
-# send_data(m, '00-80-00-00-00-00-ca-67')
+#send_data('{"test": 2}')
 
-# send_data('{"test": 1}')
 
 client = mqtt.Client()
 client.on_connect = on_connect
