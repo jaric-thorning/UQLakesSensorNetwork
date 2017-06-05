@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include <String.h>
 #include <WaspSensorGas_v20.h>
+#include <stdlib.h>
 
 char buffer [128];
 
@@ -30,17 +31,33 @@ char  connectorDString[10];
 char  connectorEString[10];
 char  connectorFString[10];
 
-void send_command(const char * command){
-    W232.send(command);
+char rtn_1[100];
+char rtn_2[100];
+char rtn_3[100];
+char rtn_4[100];
     
+int send_command(const char * command){
+    W232.send(command);
+    memset(rtn_1, 0, 100);
+    memset(rtn_2, 0, 100);
+    memset(rtn_3, 0, 100);
+    memset(rtn_4, 0, 100);
+    strcpy(rtn_1, "");
+    strcpy(rtn_2, "");
+    strcpy(rtn_3, "");
+    strcpy(rtn_4, "");
+
+    int rtn_value = 0;
+
+    char temp_buffer[2];
     char c;
     int cr_count = 0;
     while(cr_count < 3){
       delay(100); 
       int da = W232.available();
       if(da > 0){
-        USB.print(da);
-        USB.print(">");
+        //USB.print(da);
+        //USB.print(">");
         for(int i = 0; i < da; i++){
           c = W232.read();
           //USB.print(c, DEC);
@@ -49,12 +66,60 @@ void send_command(const char * command){
           //USB.print(" ");
           if(c == 10){
             cr_count++;
+          } else if(c != 13){
+            temp_buffer[0] = c;
+            temp_buffer[1] = '\0';
+            if(cr_count == 0){
+              strcat(rtn_1, temp_buffer);
+            } else if (cr_count == 1){
+              strcat(rtn_2, temp_buffer);
+            } else if (cr_count == 2){
+              strcat(rtn_3, temp_buffer);
+            } else if (cr_count == 3){
+              strcat(rtn_4, temp_buffer);
+            }
           }
         }
         
       }
     }
     USB.print("- - - - - - -\r\n");
+  
+      
+    //PROCESS RETURN STRINGS
+    if(cr_count == 4){ //return should be in rtn_4  
+      if(strcmp(rtn_4, "OK") != 0){    
+        rtn_value = 1;
+      } else{
+        rtn_value = 0;
+      }
+    } else if (cr_count == 3){ //return should be in rtn_3
+      if(strcmp(rtn_3, "OK") != 0){
+        rtn_value = 1;
+      } else{
+        rtn_value = 0;
+      }
+    }
+
+    /*USB.print("Returning: ");
+    USB.print(rtn_value);
+    USB.print("\n\r> ");
+    USB.print(cr_count);
+    USB.print("\n\r");
+    USB.print("rtn_3> ");
+    for(int i = 0; i < strlen(rtn_3); i++){
+      USB.print(rtn_3[i], DEC);
+      USB.print(" ");
+    }
+    USB.print("\n\rrtn_4> ");
+    for(int i = 0; i < strlen(rtn_3); i++){
+      USB.print(rtn_4[i], DEC);
+      USB.print(" ");
+    }
+    
+    USB.print("\n\r");*/
+    
+    return rtn_value;
 }
 
 void setup()
@@ -70,20 +135,30 @@ void setup()
     W232.stopBitConfig(1);
     W232.baudRateConfig(115200);
     delay(300);
-
-
+  
+    int error_occurred = 0;
+    int setup_not_cleared = 0; 
     //USB.print(".");
     //Connect to the UQ network:
     send_command("AT\n");
-    send_command("AT&F\n");
-    send_command("AT+FSB=7\n");
-    send_command("AT+NI=1,UQ_St_Lucia\n");
-    send_command("AT+NK=1,L0raStLucia\n");
-    send_command("AT+JR=100\n");
-    send_command("AT+JOIN\n");
-    send_command("AT+AP=4\n");
-    send_command("AT+ACK=8\n");
+    setup_not_cleared += send_command("AT&F\n");
+    setup_not_cleared += send_command("AT+FSB=7\n");
+    setup_not_cleared += send_command("AT+NI=1,UQ_St_Lucia\n");
+    setup_not_cleared += send_command("AT+NK=1,L0raStLucia\n");
+    setup_not_cleared += send_command("AT+JR=100\n");
+    setup_not_cleared += send_command("AT+JOIN\n");
+    setup_not_cleared += send_command("AT+AP=4\n");
+    setup_not_cleared += send_command("AT+ACK=8\n");
 
+    if(setup_not_cleared){
+      USB.print("Setup failed ");
+      USB.print(setup_not_cleared);
+      USB.print(" commands\n\r");
+      delay(30000);
+      setup();
+    } else{
+      USB.print("Setup cleared.\n\r");
+    }
 }
 
 void format_frame(const char * text){
@@ -232,14 +307,14 @@ void loop()
     
     //
     //Data payload composition
-    sprintf(data,"%lu %s %s %s %s %s %s~",
+    sprintf(data,"%lu,%s,%s,%s,%s,%s,%s~",
      RTC.getEpochTime(),
-     connectorAString,
-     connectorBString,
-     connectorCString,
-     connectorDString,
-     connectorEString,
-     connectorFString);
+     connectorAString,  // TEMPERATURE
+     connectorBString,  // HUMIDITY
+     connectorCString,  // CO2
+     connectorDString,  // NO2
+     connectorEString,  // O3
+     connectorFString); // CO
    
     format_frame(data);
     
