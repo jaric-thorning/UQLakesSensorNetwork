@@ -3,6 +3,7 @@ import base64
 import paho.mqtt.client as mqtt
 import json
 import locale
+import http.client
 
 from PacketSequence import PacketSequence
 
@@ -104,12 +105,12 @@ def parse_message(msg):
 
         # Send the data to the cloud:
         if not data[sender_id].packet_dropped:
-            send_data(data[sender_id], sender_id)
+            parse_payload(data[sender_id], sender_id)
         else:
             print("Sequence complete, but packet missing.")
 
 
-def send_data(mote_data, mote_id):
+def parse_payload(mote_data, mote_id):
     print("-----------------------------")
     print("Sequence complete (" + mote_id + ") . Data: " + mote_data.packet_data)
     print("-----------------------------")
@@ -141,15 +142,40 @@ def send_data(mote_data, mote_id):
             print("Wrong number of data points for type 'air sensor'")
             return
 
-        transmit_data_dict = {'time': mote_data.seq_time, 'mote': mote_id, 'temperature': components[1],
+        transmit_data_dict = {'time': mote_data.seq_time, 'mote': mote_id, 'type': 'air', 'temperature': components[1],
                               'humidity': components[2],
                               'co2': components[3], 'no2': components[4], 'o3': components[5],
                               'co': components[6]}
+    elif sensor_type == 'water':
+        if len(components) != 11:
+            print("Wrong number of data points for type 'water sensor'")
+            return
 
-        transmit_data_json = json.dumps(transmit_data_dict)
-        transmit_data = str(transmit_data_json)
+        transmit_data_dict = {'time': mote_data.seq_time, 'mote': mote_id, 'type': 'water',
+                              'temperature': components[1],
+                              'humidity': components[2],
+                              'co2': components[3], 'no2': components[4], 'o3': components[5],
+                              'co': components[6]}
+    else:
+        print('Invalid sensor type for mote ' + mote_id)
+        return
 
-    print(transmit_data)
+    transmit_data_json = json.dumps(transmit_data_dict)
+    transmit_data = str(transmit_data_json)
+
+    send_data(transmit_data)
+
+
+def send_data(data):
+    conn = http.client.HTTPSConnection("s4237341-csse4011.uqcloud.net")
+    conn.request("PUT", "/data/put.php", data)
+    response = conn.getresponse()
+
+    if response.status == 200:
+        print("Data sent to server.")
+    else:
+        print("Failed to send data: error code is " + str(response.status))
+
 
 # --------------------------------------------------
 
@@ -157,11 +183,12 @@ def send_data(mote_data, mote_id):
 # m.packet_data = '946598400 -00.00 -00 0.00 0.00 0.00 0.0'
 # send_data(m, '00-80-00-00-00-00-ca-67')
 
+#send_data('{"test": 1}')
 
-# client = mqtt.Client()
-# client.on_connect = on_connect
-# client.on_message = on_message
-#
-# client.connect(server_url, server_port, 60)
-#
-# client.loop_forever()
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+
+client.connect(server_url, server_port, 60)
+
+client.loop_forever()
