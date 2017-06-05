@@ -10,18 +10,23 @@ from PacketSequence import PacketSequence
 # Char used to separate individual data points in payload
 data_separator = ','
 
-server_url = '172.31.41.148'
-server_port = 1883
+uq_server_host = "s4237341-csse4011.uqcloud.net"
+
+mqtt_server_url = '172.31.41.148'
+mqtt_server_port = 1883
 topic = 'lora/+/up'
 
 # Motes send data to this port
-application_port = 4
+lora_application_port = 4
 
+# Stores current sequence per device
 data = dict()
 
 # Type of sensors per device. Type is either 'air' or 'water'.
-sensors = {'00-80-00-00-00-00-ca-67': 'air', '00-80-00-00-00-00-ca-19':'water'}
+sensors = {'00-80-00-00-00-00-ca-67': 'air', '00-80-00-00-00-00-ca-19': 'water'}
 
+
+# -----------------------------------------------------------------
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
@@ -44,6 +49,7 @@ def parse_message(msg):
     sender_id = j_object['deveui']
 
     if sender_id not in sensors:
+        # Ignore packets from unknown motes:
         print("Unknown sensor with id " + sender_id)
         return
 
@@ -177,7 +183,7 @@ def parse_payload(mote_data, mote_id):
 
 
 def send_data(data):
-    conn = http.client.HTTPSConnection("s4237341-csse4011.uqcloud.net")
+    conn = http.client.HTTPSConnection(uq_server_host)
     headers = {"Content-type": "application/json"}
 
     conn.request("PUT", "/data/put.php", data, headers)
@@ -188,19 +194,19 @@ def send_data(data):
     else:
         print("Failed to send data: error code is " + str(response.status))
 
-    data = response.read()
-    print(data)
+    res_content = response.read()
+    print(res_content)
 
 
 # --------------------------------------------------
 
-#send_data('{"test": 2}')
+# send_data('{"test": 2}')
 
 
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect(server_url, server_port, 60)
+client.connect(mqtt_server_url, mqtt_server_port, 60)
 
 client.loop_forever()
