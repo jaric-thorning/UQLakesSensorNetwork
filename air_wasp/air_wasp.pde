@@ -4,7 +4,8 @@
 #include <WaspSensorGas_v20.h>
 #include <stdlib.h>
 
-#include "MTDOT-LoRa.h"
+#include "MTDOT-LoRa."
+
 
 char buffer [128];
 
