@@ -4,6 +4,7 @@ import paho.mqtt.client as mqtt
 import json
 import locale
 import http.client
+import logging
 
 from PacketSequence import PacketSequence
 
@@ -29,7 +30,7 @@ sensors = {'00-80-00-00-00-00-ca-67': 'air', '00-80-00-00-00-00-ca-19': 'water'}
 # -----------------------------------------------------------------
 
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code " + str(rc))
+    logging.info("Connected with result code " + str(rc))
     client.subscribe(topic)
 
 
@@ -50,7 +51,7 @@ def parse_message(msg):
 
     if sender_id not in sensors:
         # Ignore packets from unknown motes:
-        print("Unknown sensor with id " + sender_id)
+        logging.error("Unknown sensor with id " + sender_id)
         return
 
     # Process the packet payload:
@@ -83,14 +84,14 @@ def parse_message(msg):
             data[sender_id].packet_dropped = True
 
         if diff == 0:
-            print("Packet with same sequence number received (retransmission?)")
+            logging.warning("Packet with same sequence number received (retransmission?)")
 
         if diff > 1:
             # Packet missed:
-            print("Missed " + str(diff) + " packet(s).")
+            logging.warning("Missed " + str(diff) + " packet(s).")
         if diff < 1:
             # Sequence number is lower than last number received:
-            print(
+            logging.warning(
                 "Packet has lower sequence number than previous one. Either missing control frame, or packets arrived out-of order.")
 
     # Update sequence number:
@@ -107,7 +108,7 @@ def parse_message(msg):
     data[sender_id].packet_data += data_dec
 
     # Status update:
-    print("[" + time_received + "] " + sender_id + ": " + "Sequence: " + str(
+    logging.info("[" + time_received + "] " + sender_id + ": " + "Sequence: " + str(
         data[sender_id].last_packet_seq) + ". Data: " + data_dec)
 
     # See if sequence is complete:
@@ -120,15 +121,14 @@ def parse_message(msg):
         if not data[sender_id].packet_dropped:
             parse_payload(data[sender_id], sender_id)
         else:
-            print("Sequence complete, but packet missing.")
+            logging.info("Sequence complete, but packet missing.")
 
 
 def parse_payload(mote_data, mote_id):
-    print("-----------------------------")
-    print("Sequence complete (" + mote_id + ") . Data: " + mote_data.packet_data)
+    logging.info("Sequence complete (" + mote_id + ") . Data: " + mote_data.packet_data)
 
     if mote_id not in sensors:
-        print("No sensor type for mote " + mote_id + " defined.")
+        logging.error("No sensor type for mote " + mote_id + " defined.")
         return
 
     sensor_type = sensors[mote_id]
@@ -144,14 +144,14 @@ def parse_payload(mote_data, mote_id):
             x = components[i].replace('.', dec_point)
             components[i] = float(x)
         except ValueError:
-            print("Failed to convert '" + components[i] + "' to float.")
+            logging.error("Failed to convert '" + components[i] + "' to float.")
 
     # Create correct json for sensor type:
     transmit_data = ''
     if sensor_type == 'air':
         # 6 numbers + 1 timestamp:
         if len(components) != 7:
-            print("Wrong number of data points for type 'air sensor'")
+            logging.error("Wrong number of data points for type 'air sensor'")
             return
 
         transmit_data_dict = {'time': mote_data.seq_time, 'mote': mote_id, 'type': 'air', 'temperature': components[1],
@@ -160,7 +160,7 @@ def parse_payload(mote_data, mote_id):
                               'co': components[6]}
     elif sensor_type == 'water':
         if len(components) != 10:
-            print("Wrong number of data points for type 'water sensor'")
+            logging.error("Wrong number of data points for type 'water sensor'")
             return
 
         transmit_data_dict = {'time': mote_data.seq_time, 'mote': mote_id, 'type': 'water',
@@ -169,17 +169,15 @@ def parse_payload(mote_data, mote_id):
                               'spcond': components[3], 'sal': components[4], 'ph_mv': components[5],
                               'ph': components[6], 'orp': components[7], 'depth': components[8], 'odo': components[9]}
     else:
-        print('Invalid sensor type for mote ' + mote_id)
+        logging.error('Unknown sensor type ' + sensor_type + ' for mote with id ' + mote_id)
         return
 
     transmit_data_json = json.dumps(transmit_data_dict)
     transmit_data = str(transmit_data_json)
 
-    print(transmit_data)
+    logging.info('Sending "' + transmit_data + '"')
 
-    print("-----------------------------")
-
-    # send_data(transmit_data)
+    send_data(transmit_data)
 
 
 def send_data(data):
@@ -192,18 +190,32 @@ def send_data(data):
     response = conn.getresponse()
 
     if response.status == 200:
-        print("Data sent to server.")
+        logging.info("Data sent to server.")
     else:
-        print("Failed to send data: error code is " + str(response.status))
+        res_content = response.read()
 
-    res_content = response.read()
-    print(res_content)
+        logging.info("Failed to send data: error code is " + str(response.status) + ". Response is '" + str(
+            res_content) + "'");
 
 
 # --------------------------------------------------
+logging_format = '%(asctime)s\t%(levelname)-8s\t%(name)s.%(funcName)s\t%(message)s'
 
-#send_data('{"test": 2}')
+logging.basicConfig(filename='message_decoder.log', format=logging_format,
+                    level=logging.DEBUG)
 
+# Set up logging to console:
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.DEBUG)
+
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+console.setFormatter(logging.Formatter(fmt=logging_format))
+root_logger.addHandler(console)
+
+# --------------------------------------
+
+# send_data('{"test": 2}')
 
 client = mqtt.Client()
 client.on_connect = on_connect
