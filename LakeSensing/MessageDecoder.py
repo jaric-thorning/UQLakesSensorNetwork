@@ -84,7 +84,8 @@ def parse_message(msg):
             data[sender_id].packet_dropped = True
 
         if diff == 0:
-            logging.warning("Packet with same sequence number received (retransmission?)")
+            logging.warning("Ignoring packet with same sequence number received (retransmission?)")
+            return
 
         if diff > 1:
             # Packet missed:

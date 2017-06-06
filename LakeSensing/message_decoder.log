@@ -1,0 +1,73 @@
+2017-06-06 18:30:32,022	INFO    	root.on_connect	Connected with result code 0
+2017-06-06 18:34:59,873	INFO    	root.parse_message	[2017-06-06T08:33:58.144820Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685044,
+2017-06-06 18:35:05,274	INFO    	root.parse_message	[2017-06-06T08:34:03.540570Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 25.16,42.3
+2017-06-06 18:35:06,772	INFO    	root.parse_message	[2017-06-06T08:34:05.044700Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 5,2.16,0.1
+2017-06-06 18:35:11,691	INFO    	root.parse_message	[2017-06-06T08:34:09.965316Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 9,1.04,2.2
+2017-06-06 18:35:13,223	INFO    	root.parse_message	[2017-06-06T08:34:11.500194Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 7~
+2017-06-06 18:35:13,223	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685044,25.16,42.35,2.16,0.19,1.04,2.27
+2017-06-06 18:35:13,224	INFO    	root.parse_payload	Sending "{"time": 946685044, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 25.16, "humidity": 42.35, "co2": 2.16, "no2": 0.19, "o3": 1.04, "co": 2.27}"
+2017-06-06 18:35:13,402	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:35:45,760	INFO    	root.parse_message	[2017-06-06T08:34:44.042191Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685089,
+2017-06-06 18:35:47,301	INFO    	root.parse_message	[2017-06-06T08:34:45.584263Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 29.67,42.6
+2017-06-06 18:36:02,343	INFO    	root.parse_message	[2017-06-06T08:35:00.617420Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 9,1.90,0.1
+2017-06-06 18:36:03,872	INFO    	root.parse_message	[2017-06-06T08:35:02.138835Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 6,0.94,2.4
+2017-06-06 18:36:05,389	INFO    	root.parse_message	[2017-06-06T08:35:03.671691Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 1~
+2017-06-06 18:36:05,390	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685089,29.67,42.69,1.90,0.16,0.94,2.41
+2017-06-06 18:36:05,390	INFO    	root.parse_payload	Sending "{"time": 946685089, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 29.67, "humidity": 42.69, "co2": 1.9, "no2": 0.16, "o3": 0.94, "co": 2.41}"
+2017-06-06 18:36:05,472	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:36:45,229	INFO    	root.parse_message	[2017-06-06T08:35:43.504693Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685142,
+2017-06-06 18:36:46,745	INFO    	root.parse_message	[2017-06-06T08:35:45.000965Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 26.77,42.1
+2017-06-06 18:36:48,286	INFO    	root.parse_message	[2017-06-06T08:35:46.512734Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 7,2.28,0.1
+2017-06-06 18:36:49,712	INFO    	root.parse_message	[2017-06-06T08:35:47.996044Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 1,1.00,2.5
+2017-06-06 18:36:51,205	INFO    	root.parse_message	[2017-06-06T08:35:49.460700Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 5~
+2017-06-06 18:36:51,206	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685142,26.77,42.17,2.28,0.11,1.00,2.55
+2017-06-06 18:36:51,206	INFO    	root.parse_payload	Sending "{"time": 946685142, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 26.77, "humidity": 42.17, "co2": 2.28, "no2": 0.11, "o3": 1.0, "co": 2.55}"
+2017-06-06 18:36:51,263	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:37:27,482	INFO    	root.parse_message	[2017-06-06T08:36:25.756311Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685187,
+2017-06-06 18:37:29,033	INFO    	root.parse_message	[2017-06-06T08:36:27.294409Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 30.32,42.8
+2017-06-06 18:37:35,297	INFO    	root.parse_message	[2017-06-06T08:36:33.516225Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 7,2.28,0.1
+2017-06-06 18:37:41,252	INFO    	root.parse_message	[2017-06-06T08:36:39.526838Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 0,0.90,2.6
+2017-06-06 18:37:46,796	INFO    	root.parse_message	[2017-06-06T08:36:45.064590Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 0~
+2017-06-06 18:37:46,797	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685187,30.32,42.87,2.28,0.10,0.90,2.60
+2017-06-06 18:37:46,797	INFO    	root.parse_payload	Sending "{"time": 946685187, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 30.32, "humidity": 42.87, "co2": 2.28, "no2": 0.1, "o3": 0.9, "co": 2.6}"
+2017-06-06 18:37:46,853	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:38:19,310	INFO    	root.parse_message	[2017-06-06T08:37:17.593647Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685243,
+2017-06-06 18:38:20,818	INFO    	root.parse_message	[2017-06-06T08:37:19.092319Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 25.80,43.0
+2017-06-06 18:38:26,870	INFO    	root.parse_message	[2017-06-06T08:37:25.154820Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 4,1.97,0.1
+2017-06-06 18:38:28,422	INFO    	root.parse_message	[2017-06-06T08:37:26.692017Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 7,0.91,2.7
+2017-06-06 18:38:29,882	INFO    	root.parse_message	[2017-06-06T08:37:28.150696Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 0~
+2017-06-06 18:38:29,883	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685243,25.80,43.04,1.97,0.17,0.91,2.70
+2017-06-06 18:38:29,883	INFO    	root.parse_payload	Sending "{"time": 946685243, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 25.8, "humidity": 43.04, "co2": 1.97, "no2": 0.17, "o3": 0.91, "co": 2.7}"
+2017-06-06 18:38:29,937	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:39:02,400	INFO    	root.parse_message	[2017-06-06T08:38:00.674165Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685286,
+2017-06-06 18:39:03,940	INFO    	root.parse_message	[2017-06-06T08:38:02.182561Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 28.06,43.0
+2017-06-06 18:39:05,399	INFO    	root.parse_message	[2017-06-06T08:38:03.683830Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 4,2.28,0.0
+2017-06-06 18:39:11,704	INFO    	root.parse_message	[2017-06-06T08:38:09.986533Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 7,0.93,2.7
+2017-06-06 18:39:13,163	INFO    	root.parse_message	[2017-06-06T08:38:11.435329Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 4~
+2017-06-06 18:39:13,163	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685286,28.06,43.04,2.28,0.07,0.93,2.74
+2017-06-06 18:39:13,163	INFO    	root.parse_payload	Sending "{"time": 946685286, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 28.06, "humidity": 43.04, "co2": 2.28, "no2": 0.07, "o3": 0.93, "co": 2.74}"
+2017-06-06 18:39:13,216	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:39:45,687	INFO    	root.parse_message	[2017-06-06T08:38:43.962951Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685329,
+2017-06-06 18:39:47,189	INFO    	root.parse_message	[2017-06-06T08:38:45.463942Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 25.80,43.2
+2017-06-06 18:39:53,679	INFO    	root.parse_message	[2017-06-06T08:38:51.961706Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 1,1.89,0.0
+2017-06-06 18:39:55,181	INFO    	root.parse_message	[2017-06-06T08:38:53.465843Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 9,0.88,2.8
+2017-06-06 18:39:56,652	INFO    	root.parse_message	[2017-06-06T08:38:54.923944Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 4~
+2017-06-06 18:39:56,653	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685329,25.80,43.21,1.89,0.09,0.88,2.84
+2017-06-06 18:39:56,653	INFO    	root.parse_payload	Sending "{"time": 946685329, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 25.8, "humidity": 43.21, "co2": 1.89, "no2": 0.09, "o3": 0.88, "co": 2.84}"
+2017-06-06 18:39:56,743	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:40:29,192	INFO    	root.parse_message	[2017-06-06T08:39:27.461448Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685373,
+2017-06-06 18:40:30,676	INFO    	root.parse_message	[2017-06-06T08:39:28.952439Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 25.80,44.0
+2017-06-06 18:40:32,178	INFO    	root.parse_message	[2017-06-06T08:39:30.461065Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 8,1.99,0.0
+2017-06-06 18:40:33,700	INFO    	root.parse_message	[2017-06-06T08:39:31.956253Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 9,0.87,2.8
+2017-06-06 18:40:35,142	INFO    	root.parse_message	[2017-06-06T08:39:33.412025Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 5~
+2017-06-06 18:40:35,143	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685373,25.80,44.08,1.99,0.09,0.87,2.85
+2017-06-06 18:40:35,143	INFO    	root.parse_payload	Sending "{"time": 946685373, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 25.8, "humidity": 44.08, "co2": 1.99, "no2": 0.09, "o3": 0.87, "co": 2.85}"
+2017-06-06 18:40:35,208	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:41:07,680	INFO    	root.parse_message	[2017-06-06T08:40:05.954706Z] 00-80-00-00-00-00-ca-67: Sequence: 1. Data: 946685411,
+2017-06-06 18:41:09,237	INFO    	root.parse_message	[2017-06-06T08:40:07.454227Z] 00-80-00-00-00-00-ca-67: Sequence: 2. Data: 31.29,43.7
+2017-06-06 18:41:10,662	INFO    	root.parse_message	[2017-06-06T08:40:08.944946Z] 00-80-00-00-00-00-ca-67: Sequence: 3. Data: 3,1.92,0.0
+2017-06-06 18:41:12,174	INFO    	root.parse_message	[2017-06-06T08:40:10.448076Z] 00-80-00-00-00-00-ca-67: Sequence: 4. Data: 8,0.95,2.9
+2017-06-06 18:41:13,637	INFO    	root.parse_message	[2017-06-06T08:40:11.910460Z] 00-80-00-00-00-00-ca-67: Sequence: 5. Data: 0~
+2017-06-06 18:41:13,637	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685411,31.29,43.73,1.92,0.08,0.95,2.90
+2017-06-06 18:41:13,637	INFO    	root.parse_payload	Sending "{"time": 946685411, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 31.29, "humidity": 43.73, "co2": 1.92, "no2": 0.08, "o3": 0.95, "co": 2.9}"
+2017-06-06 18:41:13,701	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
