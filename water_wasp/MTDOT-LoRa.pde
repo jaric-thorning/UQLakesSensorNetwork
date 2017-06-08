@@ -80,7 +80,7 @@ int mtdotlora_send_command(const char * command) {
 				c = W232.read();
 				//USB.print(c, DEC);
 				//USB.print(":");
-				USB.print(c);
+				//USB.print(c);
 				//USB.print(" ");
 				if (c == 10) {
 					cr_count++;
@@ -122,7 +122,7 @@ int mtdotlora_send_command(const char * command) {
 }
 
 
-void mtdotlora_send_text(const char * text) {
+int mtdotlora_send_text(const char * text) {
 	char packet[11];
 	char command[19];
 	char temp_buffer[2];
@@ -140,7 +140,7 @@ void mtdotlora_send_text(const char * text) {
 	USB.print("Formatting ");
 	USB.print(strlen(text));
 	USB.print(" bytes.\r\n");
-
+  int error_occured = 0;
 
 	while (remaining_bytes > 0) {
 		//Update packet
@@ -165,7 +165,13 @@ void mtdotlora_send_text(const char * text) {
 		  USB.print(" ");
 		}
 		USB.print("\r\n");*/
-		mtdotlora_send_command(command);
+    int retry_count = 0;
+		while(mtdotlora_send_command(command) && (retry_count < 3)){
+		  retry_count++;
+		}
+   if(retry_count >= 3){
+    error_occured = 1;
+   }
 
 		//reset packet & command
 		memset(packet, 0, 11);
@@ -179,5 +185,6 @@ void mtdotlora_send_text(const char * text) {
 		temp_buffer[1] = '\0';
 		strcpy(packet, temp_buffer);
 	}
+  return error_occured;
 }
 

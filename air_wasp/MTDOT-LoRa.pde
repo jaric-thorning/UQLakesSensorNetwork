@@ -11,10 +11,11 @@
 
 #include "MTDOT-LoRa.h"
 
-char rtn_1[100];
-char rtn_2[100];
-char rtn_3[100];
-char rtn_4[100];
+char rtn_1[200];
+char rtn_2[200];
+char rtn_3[200];
+char rtn_4[200];
+char retry_count_char[10];
 
 int mtdotlora_setup(void) {
 	//Switch mux to socket 0:
@@ -44,7 +45,6 @@ int mtdotlora_setup(void) {
 		USB.print("Setup failed ");
 		USB.print(setup_not_cleared);
 		USB.print(" commands\n\r");
-		delay(30000);
 		
 		return 1;
 	} else {
@@ -56,10 +56,10 @@ int mtdotlora_setup(void) {
 
 int mtdotlora_send_command(const char * command) {
 	W232.send(command);
-	memset(rtn_1, 0, 100);
-	memset(rtn_2, 0, 100);
-	memset(rtn_3, 0, 100);
-	memset(rtn_4, 0, 100);
+	memset(rtn_1, 0, 200);
+	memset(rtn_2, 0, 200);
+	memset(rtn_3, 0, 200);
+	memset(rtn_4, 0, 200);
 	strcpy(rtn_1, "");
 	strcpy(rtn_2, "");
 	strcpy(rtn_3, "");
@@ -122,7 +122,7 @@ int mtdotlora_send_command(const char * command) {
 }
 
 
-void mtdotlora_send_text(const char * text) {
+int mtdotlora_send_text(const char * text) {
 	char packet[11];
 	char command[19];
 	char temp_buffer[2];
@@ -140,7 +140,7 @@ void mtdotlora_send_text(const char * text) {
 	USB.print("Formatting ");
 	USB.print(strlen(text));
 	USB.print(" bytes.\r\n");
-
+  int error_occured = 0;
 
 	while (remaining_bytes > 0) {
 		//Update packet
@@ -165,7 +165,19 @@ void mtdotlora_send_text(const char * text) {
 		  USB.print(" ");
 		}
 		USB.print("\r\n");*/
-		mtdotlora_send_command(command);
+    
+    int retry_count = 0;
+    SD.append("log.txt", command);
+    SD.append("log.txt", ",");
+		while(mtdotlora_send_command(command) && (retry_count < 3)){
+		  retry_count++;
+		}
+   if(retry_count >= 3){
+    error_occured = 1;
+   }
+   sprintf(retry_count_char, "%d", retry_count);
+   SD.append("log.txt", retry_count_char);
+   SD.append("log.txt", ",");
 
 		//reset packet & command
 		memset(packet, 0, 11);
@@ -179,5 +191,6 @@ void mtdotlora_send_text(const char * text) {
 		temp_buffer[1] = '\0';
 		strcpy(packet, temp_buffer);
 	}
+  return error_occured;
 }
 

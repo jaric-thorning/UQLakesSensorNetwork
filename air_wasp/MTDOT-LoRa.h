@@ -23,7 +23,8 @@ int mtdotlora_send_command(const char * command);
 /**
  * Sends text over LoRa. If necessary, the text is broken up into multiple packets.
  * @param text Text to be sent.
+ * @return         0 if command returned OK, 1 if an error occurred
  */
-void mtdotlora_send_text(const char * text);
+int mtdotlora_send_text(const char * text);
 
 #endif

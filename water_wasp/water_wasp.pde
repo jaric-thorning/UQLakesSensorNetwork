@@ -69,7 +69,7 @@ void loop()
         int index = 0;
         sprintf(data, "%lu,%s~",
         RTC.getEpochTime(),buffer); // CO
-        USB.println(buffer);
+        //USB.println(buffer);
         if(!skipLORASend){
           mtdotlora_send_text(data);
         }
