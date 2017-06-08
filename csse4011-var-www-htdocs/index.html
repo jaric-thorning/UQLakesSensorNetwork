@@ -1,0 +1,221 @@
+<html>
+<head><title>UQ Lakes Wireless Environment Sensing</title>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Arvo">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+<link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<style type="text/css">
+body {
+    font-family: "Lato", sans-serif;
+    text-align:center;
+    color: #212121;
+    background-color:#FFFFFF;
+    font-size:150%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+#title {
+    font-family: "Lato", sans-serif;
+    font-size:200%;
+    font-weight:"light";
+    padding-bottom:20px;
+    padding-top:20px;
+    color: #303F9F;
+}
+#about {
+    font-size:110%;
+    padding-bottom:40px;
+}
+#footer {
+    font-size:60%;
+}
+#prefooter {
+    padding-top:100px;
+    font-size:80%;
+}
+#map {
+    margin-left:auto;
+    margin-right:auto;
+    min-height: 500px;
+}
+</style>
+<script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+<script src="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript">
+var chart;
+var map;
+window.onload = function () {
+    chart = new CanvasJS.Chart("chartContainer",
+    {
+      title:{
+        text: "Empty Chart, please make selections above."
+    },
+    axisX:{
+        title: "Time",
+        gridThickness: 2
+    },
+    axisY: {
+    },
+    backgroundColor: "#FFFFFF",
+    data: [
+    {
+        type: "area",
+        xValueType: "dateTime",
+        color: "#2683C6",
+        markerBorderColor: "#49075e",
+        fillOpacity: 0.3,
+        lineThickness: 1.5
+    }
+    ]
+});
+
+    chart.render();
+    updatechart();
+    initMap();
+
+    $('#datetimefrom').datetimepicker({ locale: 'en-au' });
+    $('#datetimefrom').on('dp.change', function(e) { updatechart(); });
+    $('#datetimeto').datetimepicker({ locale: 'en-au' });
+    $('#datetimeto').on('dp.change', function(e) { updatechart(); });
+
+    $.getJSON("data/getlocations.php", function(data, status) {
+        var infoWindow = new google.maps.InfoWindow({
+            content: "Temporary infowindow"
+        });
+        //test
+        for(var point in data) {
+            point = data[point];
+            var latlng = new google.maps.LatLng(point.lat, point.lng);
+            var contentString = "<b>Node " + point.mote + "</b><br />";
+            contentString += "Node Type: ";
+            if(point.type=="air") {
+                contentString += "Air sensor";
+            } else {
+                if(point.type=="water") {
+                    contentString += "Water sensor";
+                } else {
+                    contentString += "Unknown/not configured";
+                }
+            }
+            if(point.last_time>0) {
+                var tmpDate = new Date(point.last_time * 1000);
+                contentString += "<br />Last reported data: " + tmpDate.toString();
+                contentString += "<br />Last reported temperature: " + point.temperature + "C";
+            }
+            var marker = new google.maps.Marker({
+                position:latlng,
+                map: map,
+                content: contentString
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+                infoWindow.setContent(this.content);
+                infoWindow.open(map, this);
+            });
+        }
+    });
+}
+
+var types = {temperature: "Temperature",
+        humidity: "Humidity", co2: "CO2", no2: "NO2", o3: "O3", co: "CO",
+        cond: "COND", spcond: "SPCOND", sal: "SAL", ph_mv: "PHMV", ph: "PH", orp: "ORP", depth: "DEPTH", odo: "ODO"
+        };
+var units = {temperature: " (C)",
+        humidity: " (%)", co2: "", no2: "", o3: "", co: "",
+        cond: "", spcond: "", sal: "", ph_mv: "", ph: "", orp: "", depth: "", odo: ""
+        };
+
+function updatechart() {
+    var typetemp = document.getElementById("type").value;
+    var motetemp = document.getElementById("mote").value;
+    var starttime = $('#datetimefrom').data("DateTimePicker");
+    if(starttime!=null && starttime.date()!=null) {
+        starttime = starttime.date().unix();
+    } else {
+        starttime = "";
+    }
+    var endtime = $('#datetimeto').data("DateTimePicker");
+    if(endtime!=null && endtime.date()!=null) {
+        endtime = endtime.date().unix();
+    } else {
+        endtime = "";
+    }
+    chart.options.title.text = types[typetemp] + " data for sensor " + motetemp + "";
+    chart.options.axisY.title = types[typetemp] + units[typetemp];
+
+    var vals = 1;
+    $.getJSON("data/get2.php?mote=" + motetemp + "&measure=" + typetemp + "&time_after=" + starttime + "&time_before=" + endtime, function(data, status) {
+        chart.data[0].set("dataPoints", data);
+        setTimeout(updatechart, 5000);
+    });
+    chart.render();
+}
+
+function initMap() {
+    var uqlakes = {lat: -27.499610, lng: 153.016181};
+    map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 17,
+        center: uqlakes
+    });
+}
+
+</script>
+<script type="text/javascript" src="script/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="title"><big>UQ</big>LAKES <big>W</big>IRELESS <big>E</big>NVIRONMENT <big>S</big>ENSING</div>
+<hr>
+<div id="about">
+This web portal displays environment sensor data from connected nodes at UQ Lakes. Select a device and a measure type to display data from that device.
+</div>
+<b>Select Device:</b> <select id='mote' onchange='updatechart()'>
+<option value='00-80-00-00-00-00-ca-19' onchange='updatechart()'>Air sensor CA19</option>
+<option value='00-80-00-00-00-00-ca-67' onchange='updatechart()'>Water sensor CA67</option>
+</select><br />
+<b>Select Measure:</b> <select id='type' onchange='updatechart()'>
+<option value='temperature' onchange='updatechart()'>Temperature</option>
+<option value='humidity' onchange='updatechart()'>Humidity (Air sensors only)</option>
+<option value='co2' onchange='updatechart()'>CO2 (Air sensors only)</option>
+<option value='no2' onchange='updatechart()'>NO2 (Air sensors only)</option>
+<option value='o3' onchange='updatechart()'>O3 (Air sensors only)</option>
+<option value='co' onchange='updatechart()'>CO (Air sensors only)</option>
+<option value='cond' onchange='updatechart()'>Cond (Water sensors only)</option>
+<option value='spcond' onchange='updatechart()'>SPCond (Water sensors only)</option>
+<option value='sal' onchange='updatechart()'>SAL (Water sensors only)</option>
+<option value='ph_mv' onchange='updatechart()'>PH_MV (Water sensors only)</option>
+<option value='ph' onchange='updatechart()'>PH (Water sensors only)</option>
+<option value='orp' onchange='updatechart()'>ORP (Water sensors only)</option>
+<option value='depth' onchange='updatechart()'>DEPTH (Water sensors only)</option>
+<option value='odo' onchange='updatechart()'>ODO (Water sensors only)</option>
+</select><br />
+<b>Time from:</b><div class='input-group date' id='datetimefrom'>
+<input type='text' class='form-control' />
+<span class='input-group-addon'>
+<span class='glyphicon glyphicon-calendar'></span>
+</span>
+</div>
+<b>Time to:</b><div class='input-group date' id='datetimeto'>
+<input type='text' class='form-control' />
+<span class='input-group-addon'>
+<span class='glyphicon glyphicon-calendar'></span>
+</span>
+</div>
+<div id="chartContainer" style="height: 350px; width: 100%;"></div>
+<b>Last known location of nodes:</b>
+<div id="map"></div>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaIzVaY3-8822RPHUwsZWvi_kyCeCrY0U&callback=initMap">
+</script>
+<div id="prefooter">The work on this has been completed by Paul Kogel, Laurence McLean, Brett Sawyers and Jaric Thorning, with help from course tutor Tim Hadwen and course coordinator Matt D'Souza as part of our CSSE4011 assessment in 2017.<br /><br />
+JSON format for all data stored is available at <a href='/data/get.php' target='_blank'>https://s4237341-csse4011.uqcloud.net/data/get.php</a>. Get parameters can be used to restrict the data returned, using "mote" for the id of the data source, "type" for the type of the data source (water or air), "time_before" and "time_after" to restrict data to a specific timeframe. Timestamps should be in seconds since 1 Jan 1970.
+</div>
+<div id="footer">
+JQuery library used, available at <a href='https://jquery.com/' target='_blank'>https://jquery.com/</a>
+<br/>
+Charts using CanvasJS, available at <a href='http://canvasjs.com/' target='_blank'>http://canvasjs.com/</a>
+<br />
+Date/time pickers using Bootstrap datepicker, available at <a href='http://eonasdan.github.io/bootstrap-datetimepicker/' target='_blank'>http://eonasdan.github.io/bootstrap-datetimepicker/</a></div>
+</body>
+</html>
