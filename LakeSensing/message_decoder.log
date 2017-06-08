@@ -71,3 +71,78 @@
 2017-06-06 18:41:13,637	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-67) . Data: 946685411,31.29,43.73,1.92,0.08,0.95,2.90
 2017-06-06 18:41:13,637	INFO    	root.parse_payload	Sending "{"time": 946685411, "mote": "00-80-00-00-00-00-ca-67", "type": "air", "temperature": 31.29, "humidity": 43.73, "co2": 1.92, "no2": 0.08, "o3": 0.95, "co": 2.9}"
 2017-06-06 18:41:13,701	INFO    	root.send_data	Failed to send data: error code is 500. Response is 'b'''
+2017-06-06 18:51:10,356	INFO    	root.on_connect	Connected with result code 0
+2017-06-07 10:49:34,292	INFO    	root.on_connect	Connected with result code 0
+2017-06-07 10:51:49,222	INFO    	root.on_connect	Connected with result code 0
+2017-06-07 11:26:50,115	INFO    	root.on_connect	Connected with result code 0
+2017-06-08 15:48:06,127	INFO    	root.on_connect	Connected with result code 0
+2017-06-08 15:48:07,259	DEBUG   	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:07,260	INFO    	root.parse_message	[2017-06-08T05:47:04.638290Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688427,
+2017-06-08 15:48:08,769	DEBUG   	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:08,769	INFO    	root.parse_message	[2017-06-08T05:47:06.134907Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 21.61,44.7
+2017-06-08 15:48:10,279	DEBUG   	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:10,279	INFO    	root.parse_message	[2017-06-08T05:47:07.651224Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 7,3.29,0.0
+2017-06-08 15:48:35,592	INFO    	root.on_connect	Connected with result code 0
+2017-06-08 15:48:35,757	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:35,757	WARNING 	root.parse_message	Missed 4 packet(s).
+2017-06-08 15:48:35,757	INFO    	root.parse_message	[2017-06-08T05:47:33.124784Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 5,3.29,0.0
+2017-06-08 15:48:37,268	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:37,268	INFO    	root.parse_message	[2017-06-08T05:47:34.635037Z] 00-80-00-00-00-00-ca-19: Sequence: 4. Data: 5,1.07,0.0
+2017-06-08 15:48:38,717	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:38,718	INFO    	root.parse_message	[2017-06-08T05:47:36.085656Z] 00-80-00-00-00-00-ca-19: Sequence: 5. Data: 0~
+2017-06-08 15:48:38,718	INFO    	root.parse_message	Sequence complete, but packet missing.
+2017-06-08 15:48:41,259	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:41,260	INFO    	root.parse_message	[2017-06-08T05:47:38.628711Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688461,
+2017-06-08 15:48:42,755	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:42,755	INFO    	root.parse_message	[2017-06-08T05:47:40.127900Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 23.54,44.6
+2017-06-08 15:48:44,259	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:44,259	INFO    	root.parse_message	[2017-06-08T05:47:41.625539Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 0,3.29,0.0
+2017-06-08 15:48:45,847	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:45,847	INFO    	root.parse_message	[2017-06-08T05:47:43.121680Z] 00-80-00-00-00-00-ca-19: Sequence: 4. Data: 1,1.07,0.0
+2017-06-08 15:48:47,297	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:47,297	INFO    	root.parse_message	[2017-06-08T05:47:44.584904Z] 00-80-00-00-00-00-ca-19: Sequence: 5. Data: 0~
+2017-06-08 15:48:47,298	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-19) . Data: 946688461,23.54,44.60,3.29,0.01,1.07,0.00
+2017-06-08 15:48:47,299	ERROR   	root.parse_payload	Wrong number of data points for type 'water sensor'
+2017-06-08 15:48:49,756	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:49,756	INFO    	root.parse_message	[2017-06-08T05:47:47.123618Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688469,
+2017-06-08 15:48:51,306	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:51,306	INFO    	root.parse_message	[2017-06-08T05:47:48.640266Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 23.87,44.6
+2017-06-08 15:48:52,778	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:52,779	INFO    	root.parse_message	[2017-06-08T05:47:50.122425Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 0,3.29,0.0
+2017-06-08 15:48:54,273	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:54,274	INFO    	root.parse_message	[2017-06-08T05:47:51.621426Z] 00-80-00-00-00-00-ca-19: Sequence: 4. Data: 0,1.13,0.0
+2017-06-08 15:48:55,709	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:55,709	INFO    	root.parse_message	[2017-06-08T05:47:53.081041Z] 00-80-00-00-00-00-ca-19: Sequence: 5. Data: 0~
+2017-06-08 15:48:55,710	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-19) . Data: 946688469,23.87,44.60,3.29,0.00,1.13,0.00
+2017-06-08 15:48:55,710	ERROR   	root.parse_payload	Wrong number of data points for type 'water sensor'
+2017-06-08 15:48:58,242	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:58,243	INFO    	root.parse_message	[2017-06-08T05:47:55.613771Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688478,
+2017-06-08 15:48:59,748	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:48:59,749	INFO    	root.parse_message	[2017-06-08T05:47:57.116199Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 25.16,44.9
+2017-06-08 15:49:01,238	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:49:01,238	INFO    	root.parse_message	[2017-06-08T05:47:58.614652Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 5,3.29,0.0
+2017-06-08 15:49:02,736	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:49:02,736	INFO    	root.parse_message	[2017-06-08T05:48:00.113484Z] 00-80-00-00-00-00-ca-19: Sequence: 4. Data: 1,1.12,0.0
+2017-06-08 15:49:04,208	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:49:04,208	INFO    	root.parse_message	[2017-06-08T05:48:01.575028Z] 00-80-00-00-00-00-ca-19: Sequence: 5. Data: 0~
+2017-06-08 15:49:04,210	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-19) . Data: 946688478,25.16,44.95,3.29,0.01,1.12,0.00
+2017-06-08 15:49:04,210	ERROR   	root.parse_payload	Wrong number of data points for type 'water sensor'
+2017-06-08 15:49:06,745	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:49:06,745	INFO    	root.parse_message	[2017-06-08T05:48:04.114290Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688486,
+2017-06-08 15:52:20,801	INFO    	root.on_connect	Connected with result code 0
+2017-06-08 15:52:23,138	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:52:23,138	INFO    	root.parse_message	[2017-06-08T05:51:20.517308Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688683,
+2017-06-08 15:52:24,643	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:52:24,643	INFO    	root.parse_message	[2017-06-08T05:51:22.016923Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 21.61,44.4
+2017-06-08 15:52:26,145	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:52:26,146	INFO    	root.parse_message	[2017-06-08T05:51:23.515180Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 3,3.29,0.0
+2017-06-08 15:52:27,659	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:52:27,659	INFO    	root.parse_message	[2017-06-08T05:51:25.020048Z] 00-80-00-00-00-00-ca-19: Sequence: 4. Data: 1,1.07,0.0
+2017-06-08 15:52:29,108	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:52:29,109	INFO    	root.parse_message	[2017-06-08T05:51:26.485798Z] 00-80-00-00-00-00-ca-19: Sequence: 5. Data: 0~
+2017-06-08 15:52:29,109	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-19) . Data: 946688683,21.61,44.43,3.29,0.01,1.07,0.00
+2017-06-08 15:52:29,109	ERROR   	root.parse_payload	Wrong number of data points for type 'water sensor'
+2017-06-08 15:52:31,649	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:52:31,649	INFO    	root.parse_message	[2017-06-08T05:51:29.019936Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688691,
+2017-06-08 15:52:33,146	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:52:33,147	INFO    	root.parse_message	[2017-06-08T05:51:30.512878Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 20.96,45.1

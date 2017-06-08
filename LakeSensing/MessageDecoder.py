@@ -24,7 +24,7 @@ lora_application_port = 4
 data = dict()
 
 # Type of sensors per device. Type is either 'air' or 'water'.
-sensors = {'00-80-00-00-00-00-ca-67': 'air', '00-80-00-00-00-00-ca-19': 'water'}
+sensors = {'00-80-00-00-00-00-ca-67': 'water', '00-80-00-00-00-00-ca-19': 'air'}
 
 
 # -----------------------------------------------------------------
@@ -53,6 +53,8 @@ def parse_message(msg):
         # Ignore packets from unknown motes:
         logging.error("Unknown sensor with id " + sender_id)
         return
+
+    logging.info("Incoming packet from mote with id " + sender_id)
 
     # Process the packet payload:
     packet_data = j_object['data']
@@ -178,7 +180,7 @@ def parse_payload(mote_data, mote_id):
 
     logging.info('Sending "' + transmit_data + '"')
 
-    send_data(transmit_data)
+    #send_data(transmit_data)
 
 
 def send_data(data):
