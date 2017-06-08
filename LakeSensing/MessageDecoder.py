@@ -1,5 +1,5 @@
 import base64
-
+import time
 import paho.mqtt.client as mqtt
 import json
 import locale
@@ -138,7 +138,8 @@ def parse_payload(mote_data, mote_id):
     components = mote_data.packet_data.split(data_separator)
 
     # First component should be timestamp:
-    mote_data.seq_time = int(components[0])
+    mote_data.seq_time = int(time.time())
+    #mote_data.seq_time = int(components[0])
 
     # Replace decimal separator with local one to ensure compatability when using different locales + parse floats:
     dec_point = locale.localeconv()['decimal_point']

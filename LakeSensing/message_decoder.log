@@ -146,3 +146,36 @@
 2017-06-08 15:52:31,649	INFO    	root.parse_message	[2017-06-08T05:51:29.019936Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688691,
 2017-06-08 15:52:33,146	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
 2017-06-08 15:52:33,147	INFO    	root.parse_message	[2017-06-08T05:51:30.512878Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 20.96,45.1
+2017-06-08 15:57:06,646	INFO    	root.on_connect	Connected with result code 0
+2017-06-08 15:57:07,220	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:07,220	WARNING 	root.parse_message	Missed 4 packet(s).
+2017-06-08 15:57:07,220	INFO    	root.parse_message	[2017-06-08T05:56:04.599265Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 7,3.29,0.0
+2017-06-08 15:57:08,715	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:08,716	INFO    	root.parse_message	[2017-06-08T05:56:06.094329Z] 00-80-00-00-00-00-ca-19: Sequence: 4. Data: 1,1.07,0.0
+2017-06-08 15:57:10,186	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:10,187	INFO    	root.parse_message	[2017-06-08T05:56:07.553425Z] 00-80-00-00-00-00-ca-19: Sequence: 5. Data: 0~
+2017-06-08 15:57:10,187	INFO    	root.parse_message	Sequence complete, but packet missing.
+2017-06-08 15:57:12,716	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:12,716	INFO    	root.parse_message	[2017-06-08T05:56:10.084883Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688972,
+2017-06-08 15:57:14,205	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:14,205	INFO    	root.parse_message	[2017-06-08T05:56:11.587639Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 21.61,45.3
+2017-06-08 15:57:15,715	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:15,716	INFO    	root.parse_message	[2017-06-08T05:56:13.092930Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 0,3.29,0.0
+2017-06-08 15:57:17,229	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:17,229	INFO    	root.parse_message	[2017-06-08T05:56:14.591808Z] 00-80-00-00-00-00-ca-19: Sequence: 4. Data: 0,1.15,0.0
+2017-06-08 15:57:18,685	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:18,687	INFO    	root.parse_message	[2017-06-08T05:56:16.063962Z] 00-80-00-00-00-00-ca-19: Sequence: 5. Data: 0~
+2017-06-08 15:57:18,687	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-19) . Data: 946688972,21.61,45.30,3.29,0.00,1.15,0.00
+2017-06-08 15:57:18,688	INFO    	root.parse_payload	Sending "{"time": 1496901438, "mote": "00-80-00-00-00-00-ca-19", "type": "air", "temperature": 21.61, "humidity": 45.3, "co2": 3.29, "no2": 0.0, "o3": 1.15, "co": 0.0}"
+2017-06-08 15:57:21,228	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:21,229	INFO    	root.parse_message	[2017-06-08T05:56:18.582596Z] 00-80-00-00-00-00-ca-19: Sequence: 1. Data: 946688981,
+2017-06-08 15:57:22,718	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:22,718	INFO    	root.parse_message	[2017-06-08T05:56:20.086549Z] 00-80-00-00-00-00-ca-19: Sequence: 2. Data: 23.22,44.7
+2017-06-08 15:57:24,207	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:24,207	INFO    	root.parse_message	[2017-06-08T05:56:21.587542Z] 00-80-00-00-00-00-ca-19: Sequence: 3. Data: 7,3.29,0.0
+2017-06-08 15:57:25,722	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:25,723	INFO    	root.parse_message	[2017-06-08T05:56:23.078307Z] 00-80-00-00-00-00-ca-19: Sequence: 4. Data: 2,1.07,0.0
+2017-06-08 15:57:27,165	INFO    	root.parse_message	Incoming packet from mote with id 00-80-00-00-00-00-ca-19
+2017-06-08 15:57:27,165	INFO    	root.parse_message	[2017-06-08T05:56:24.545178Z] 00-80-00-00-00-00-ca-19: Sequence: 5. Data: 0~
+2017-06-08 15:57:27,165	INFO    	root.parse_payload	Sequence complete (00-80-00-00-00-00-ca-19) . Data: 946688981,23.22,44.77,3.29,0.02,1.07,0.00
+2017-06-08 15:57:27,165	INFO    	root.parse_payload	Sending "{"time": 1496901447, "mote": "00-80-00-00-00-00-ca-19", "type": "air", "temperature": 23.22, "humidity": 44.77, "co2": 3.29, "no2": 0.02, "o3": 1.07, "co": 0.0}"
